@@ -3,17 +3,17 @@
  * Php-Profiler output template
  *
  * Copyright (C) 2012 Jim Rubenstein <jrubenstein@gmail.com>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
  * the Software without restriction, including without limitation the rights to
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
  * of the Software, and to permit persons to whom the Software is furnished to do
  * so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -34,14 +34,14 @@
 <?php endif; ?>
 
 <style type="text/css">
-#profiler-main_container { 
-	position: fixed; 
-	z-index: 2147483640; 
-	left: 0; 
-	top: 0; 
-	font-family: Arial,Liberation Sans,DejaVu Sans,sans-serif; 
+#profiler-main_container {
+	position: fixed;
+	z-index: 2147483640;
+	left: 0;
+	top: 0;
+	font-family: Arial,Liberation Sans,DejaVu Sans,sans-serif;
 	font-size: 100%;
-	color: #555; 
+	color: #555;
 }
 
 #profiler-main_container a { color: #07c; text-decoration: none; }
@@ -51,8 +51,8 @@
 
 .profiler-button {
 	float: left;
-	padding: 4px 7px; 
-	background: #FFF; 
+	padding: 4px 7px;
+	background: #FFF;
 	border-right: 1px solid #888;
 	border-bottom: 1px solid #888;
 	text-align: center;
@@ -92,7 +92,7 @@
 }
 
 .profiler-result {
-	
+
 }
 
 .profiler-info { padding: 3px 0; margin-bottom: 3px; border-bottom: 1px solid #DDD; overflow: hidden; }
@@ -120,7 +120,7 @@
 }
 
 .profiler-result-steps td.profiler-stat {
-	text-align: right; 
+	text-align: right;
 	font-size: 95%;
 	color: #000;
 	width: 90px;
@@ -153,57 +153,57 @@ pre.prettyprint {
 
 	border: 0;
 	padding: 0;
-	
+
 	font-size: 85%;
 }
 
 </style>
 <div id="profiler-main_container">
 	<div id="pofiler-main_timer" class="profiler-button">
-		<?php echo self::getGlobalDuration(); ?> <span class="profiler-unit">ms</span>  / 
-		<?php $mem = self::getMemUsage(); echo $mem['num']; ?> <span class="profiler-unit"><?php echo $mem['unit'] ?>B</span>
+	<?php echo self::getGlobalDuration(); ?> <span class="profiler-unit">ms</span>  /
+	<?php $mem = self::getMemUsage(); echo $mem['num']; ?> <span class="profiler-unit"><?php echo $mem['unit'] ?>B</span>
 	</div>
-	
+
 	<div class="profiler-result-container profiler-hidden">
-		<div id="profiler-results" class="profiler-result profiler-result-steps profiler-children-hidden profiler-trivial-hidden">
-			<div class="profiler-info">
-				<span class="profiler-title"><?php echo substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], '?')); ?></span>
-			
-				<span class="profiler-servername">
-					<?php list($servername) = explode('.', php_uname('n')); echo $servername; ?>
-					on
-					<?php echo date('D, d M Y H:i:s T'); ?>
-				</span>
-			</div>
-		
-			<table border="0" cell-padding="0" cellspacing="0">
-				<tr>
-					<th class="profiler-step_id"></th>
-					<th class="profiler-step_self_duration">duration (ms)</th>
-					<th class="profiler-step_total_duration">with children (ms)</th>
-					<th class="profiler-step-start_delay">from start (ms)</th>
-					<th class="profiler-step-query_info" colspan="2">query time (ms)</th>
-				</tr>
-	
-				<?php foreach (self::$topNodes as $node): ProfilerRenderer::renderNode($node, $show_depth); endforeach; ?>
-			
-				<tfoot>
-					<tr>
-						<td colspan="3" class="profiler-extended-links">
-							<a href="#" id="profiler-show-trivial_button">show trivial</a>
-							<a href="#" id="profiler-show-total_duration">show time w/children</a>
-						</td>
-						<td colspan="3" class="profiler-total-querytime profiler-monospace"><?php echo self::getGlobalDuration() > 0? round(self::getTotalQueryTime() / self::getGlobalDuration(), 2) * 100 : 0; ?><span class="unit">% in sql</span></td>
-					</tr>
-				</tfoot>
-			</table>
-		</div><!-- /#profiler-results -->
-	
-		<div id="profiler-query-results" class="profiler-result profiler-result-queries profiler-hidden">
-			<table border="0" cell-padding="0" cellspacing="0">
-				<?php foreach (self::$topNodes as $node): ProfilerRenderer::renderNodeSQL($node); endforeach; ?>
-			</table>
-		</div><!-- /#profiler-query-results -->
+	<div id="profiler-results" class="profiler-result profiler-result-steps profiler-children-hidden profiler-trivial-hidden">
+		<div class="profiler-info">
+		<span class="profiler-title"><?php echo substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], '?')); ?></span>
+
+		<span class="profiler-servername">
+			<?php list($servername) = explode('.', php_uname('n')); echo $servername; ?>
+			on
+			<?php echo date('D, d M Y H:i:s T'); ?>
+		</span>
+		</div>
+
+		<table border="0" cell-padding="0" cellspacing="0">
+		<tr>
+			<th class="profiler-step_id"></th>
+			<th class="profiler-step_self_duration">duration (ms)</th>
+			<th class="profiler-step_total_duration">with children (ms)</th>
+			<th class="profiler-step-start_delay">from start (ms)</th>
+			<th class="profiler-step-query_info" colspan="2">query time (ms)</th>
+		</tr>
+
+		<?php foreach (self::$topNodes as $node): ProfilerRenderer::renderNode($node, $show_depth); endforeach; ?>
+
+		<tfoot>
+			<tr>
+			<td colspan="3" class="profiler-extended-links">
+				<a href="#" id="profiler-show-trivial_button">show trivial</a>
+				<a href="#" id="profiler-show-total_duration">show time w/children</a>
+			</td>
+			<td colspan="3" class="profiler-total-querytime profiler-monospace"><?php echo self::getGlobalDuration() > 0? round(self::getTotalQueryTime() / self::getGlobalDuration(), 2) * 100 : 0; ?><span class="unit">% in sql</span></td>
+			</tr>
+		</tfoot>
+		</table>
+	</div><!-- /#profiler-results -->
+
+	<div id="profiler-query-results" class="profiler-result profiler-result-queries profiler-hidden">
+		<table border="0" cell-padding="0" cellspacing="0">
+		<?php foreach (self::$topNodes as $node): ProfilerRenderer::renderNodeSQL($node); endforeach; ?>
+		</table>
+	</div><!-- /#profiler-query-results -->
 	</div><!-- /#profiler-results-container -->
 </div>
 
@@ -220,89 +220,89 @@ pre.prettyprint {
 {
 	$('#pofiler-main_timer').click(function(event)
 	{
-		$(this).toggleClass('profiler-button_selected');
-		$('.profiler-result-container').toggleClass('profiler-hidden');
+	$(this).toggleClass('profiler-button_selected');
+	$('.profiler-result-container').toggleClass('profiler-hidden');
 	});
-	
+
 	var flagChildrenVisible = false;
 	$('#profiler-show-total_duration').click(function(event)
 	{
-		if (flagChildrenVisible)
-		{
-			$('#profiler-results').addClass('profiler-children-hidden')
-			$(this).text("show time w/children");
-			flagChildrenVisible = false;
-		}
-		else
-		{
-			$('#profiler-results').removeClass('profiler-children-hidden')
-			$(this).text('hide children');
-			flagChildrenVisible = true;
-		}
-		event.preventDefault();
+	if (flagChildrenVisible)
+	{
+		$('#profiler-results').addClass('profiler-children-hidden')
+		$(this).text("show time w/children");
+		flagChildrenVisible = false;
+	}
+	else
+	{
+		$('#profiler-results').removeClass('profiler-children-hidden')
+		$(this).text('hide children');
+		flagChildrenVisible = true;
+	}
+	event.preventDefault();
 	});
-	
+
 	var flagTrivialVisible = false;
 	$('#profiler-show-trivial_button').click(function(event)
 	{
-		if (flagTrivialVisible) //hide trivial methods
-		{
-			flagTrivialVisible = false;
-			$('#profiler-results').addClass('profiler-trivial-hidden')
-			$(this).text('show trivial');
-		}
-		else
-		{
-			flagTrivialVisible = true;
-			$('#profiler-results').removeClass('profiler-trivial-hidden')
-			$(this).text('hide trivial');
-		}
-		event.preventDefault();
+	if (flagTrivialVisible) //hide trivial methods
+	{
+		flagTrivialVisible = false;
+		$('#profiler-results').addClass('profiler-trivial-hidden')
+		$(this).text('show trivial');
+	}
+	else
+	{
+		flagTrivialVisible = true;
+		$('#profiler-results').removeClass('profiler-trivial-hidden')
+		$(this).text('hide trivial');
+	}
+	event.preventDefault();
 	})
-	
+
 	var queryVisibleFlags = {};
 	$('.profiler-show-callstack').click(function(event)
 	{
-		var queryId = $(this).data('query-id');
-		if (typeof queryVisibleFlags[ queryId ] == 'undefined')
-		{
-			queryVisibleFlags[ queryId ] = false;
-		}
-		
-		if (queryVisibleFlags[ queryId ]) //hide callstack
-		{
-			$('#' + queryId + "_query_callstack").addClass('profiler-hidden');
-			$(this).text('show callstack');
-			queryVisibleFlags[ queryId ] = false;
-		}
-		else //show callstack
-		{
-			$('#' + queryId + "_query_callstack").removeClass('profiler-hidden');
-			$(this).text('hide callstack');
-			queryVisibleFlags[ queryId ] = true;
-		}
-		
-		event.preventDefault();
+	var queryId = $(this).data('query-id');
+	if (typeof queryVisibleFlags[ queryId ] == 'undefined')
+	{
+		queryVisibleFlags[ queryId ] = false;
+	}
+
+	if (queryVisibleFlags[ queryId ]) //hide callstack
+	{
+		$('#' + queryId + "_query_callstack").addClass('profiler-hidden');
+		$(this).text('show callstack');
+		queryVisibleFlags[ queryId ] = false;
+	}
+	else //show callstack
+	{
+		$('#' + queryId + "_query_callstack").removeClass('profiler-hidden');
+		$(this).text('hide callstack');
+		queryVisibleFlags[ queryId ] = true;
+	}
+
+	event.preventDefault();
 	})
 
 	$('.profiler-show-queries-button').click(function(event)
 	{
-		$('#profiler-query-results').toggleClass('profiler-hidden');
+	$('#profiler-query-results').toggleClass('profiler-hidden');
 
-		var nodeId = $(this).data('node-id');
-		window.location.hash = 'profiler-node-queries-' + nodeId;
-		$('.profiler-node-queries-' + nodeId).each(function () {
-			var cell = $(this),
-			highlightHex = '#FFFFBB',
-			currentColor = '#FFF';
-			
-			cell.css('backgroundColor', highlightHex);
-			
-			cell.animate({ backgroundColor: currentColor }, 2000);
-		});
-		event.preventDefault();
+	var nodeId = $(this).data('node-id');
+	window.location.hash = 'profiler-node-queries-' + nodeId;
+	$('.profiler-node-queries-' + nodeId).each(function () {
+		var cell = $(this),
+		highlightHex = '#FFFFBB',
+		currentColor = '#FFF';
+
+		cell.css('backgroundColor', highlightHex);
+
+		cell.animate({ backgroundColor: currentColor }, 2000);
 	});
-	
+	event.preventDefault();
+	});
+
 	prettyPrint();
 })(jQuery);
 </script>

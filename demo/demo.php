@@ -18,7 +18,7 @@ $s1->end();
 $s2 = Profiler::start('Step 2');
 //more important things
 usleep(100000);  // 0.1 sec
-	
+
 	$s3 = Profiler::start('Step 3');
 	//some nested things..that are important and stuff.
 	sleep(1);
@@ -26,7 +26,7 @@ usleep(100000);  // 0.1 sec
 	$sql = Profiler::sqlStart("SELECT * FROM TABLE WHERE 1");
 	usleep(1500000);  // 1.5 sec
 	$sql->end();
-	
+
 	$s3->end();
 $s2->end();
 ?>
@@ -36,7 +36,7 @@ $s2->end();
 <title>php-profiler demo</title>
 </head>
 <body>
-	
+
 <?php Profiler::render(); ?>
 
 </body>

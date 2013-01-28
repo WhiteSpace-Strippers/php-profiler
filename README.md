@@ -25,14 +25,14 @@ Glad you asked! It's simple!
 require 'profiler.php';
 
 Profiler::enable();
- 		
+
 $profBlock = Profiler::start('my block');
 sleep(1);
 $profBlock->end();
- 		
+
 ?>
 ```
-		
+
 You can also accomplish the same thing without keeping track of the reference to the current step block, like this:
 
 **Method #2**

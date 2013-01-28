@@ -166,7 +166,7 @@ class Profiler
 	 */
 	public function __construct()
 	{
-		throw new Exception("The Profiler class is a static class. Do not instantiate it, access all member methods statically.");
+	throw new Exception("The Profiler class is a static class. Do not instantiate it, access all member methods statically.");
 	}
 	
 	/**
@@ -178,12 +178,12 @@ class Profiler
 	 */
 	public static function init()
 	{
-		if (self::$init) return;
-		
-		self::$globalStart = microtime(true);
-		self::$profilerKey = md5(rand(1,1000) . 'louddoor!' . time());
-		self::$ghostNode = new ProfilerGhostNode;
-		self::$init = true;
+	if (self::$init) return;
+	
+	self::$globalStart = microtime(true);
+	self::$profilerKey = md5(rand(1,1000) . 'louddoor!' . time());
+	self::$ghostNode = new ProfilerGhostNode;
+	self::$init = true;
 	}
 	
 	/**
@@ -195,7 +195,7 @@ class Profiler
 	 */
 	public static function isEnabled()
 	{
-		return self::$enabled;
+	return self::$enabled;
 	}
 	
 	/**
@@ -207,7 +207,7 @@ class Profiler
 	 */
 	public static function enable()
 	{
-		self::$enabled = true;
+	self::$enabled = true;
 	}
 	
 	/**
@@ -219,14 +219,14 @@ class Profiler
 	 */
 	public static function disable()
 	{
-		if (self::$currentNode == null && count(self::$topNodes) == 0)
-		{
-			self::$enabled = false;
-		}
-		else
-		{
-			throw new exception("Can not disable profiling once it has begun.");
-		}
+	if (self::$currentNode == null && count(self::$topNodes) == 0)
+	{
+		self::$enabled = false;
+	}
+	else
+	{
+		throw new exception("Can not disable profiling once it has begun.");
+	}
 	}
 	
 	/**
@@ -240,22 +240,22 @@ class Profiler
 	 */	
 	public static function start($nodeName)
 	{	
-		if (!self::isEnabled()) return self::$ghostNode;
-				
-		$newNode = new ProfilerNode($nodeName, ++self::$depthCount, self::$currentNode, self::$profilerKey);
+	if (!self::isEnabled()) return self::$ghostNode;
 		
-		if (self::$currentNode)
-		{
-			self::$currentNode->addChild($newNode);
-		}
-		else
-		{
-			self::$topNodes []= $newNode;
-		}
-		
-		self::$currentNode = $newNode;
-		
-		return self::$currentNode;
+	$newNode = new ProfilerNode($nodeName, ++self::$depthCount, self::$currentNode, self::$profilerKey);
+	
+	if (self::$currentNode)
+	{
+		self::$currentNode->addChild($newNode);
+	}
+	else
+	{
+		self::$topNodes []= $newNode;
+	}
+	
+	self::$currentNode = $newNode;
+	
+	return self::$currentNode;
 	}
 	
 	/**
@@ -270,31 +270,31 @@ class Profiler
 	 */
 	public static function end($nodeName, $nuke = false)
 	{	
-		if (!self::isEnabled()) return self::$ghostNode;
-		
-		if (self::$currentNode == null)
+	if (!self::isEnabled()) return self::$ghostNode;
+	
+	if (self::$currentNode == null)
+	{
+		return;
+	}
+	
+	while (self::$currentNode && self::$currentNode->getName() != $nodeName)
+	{
+		if (!$nuke)
 		{
-			return;
+		trigger_error("Ending profile node '" . self::$currentNode->getName() . "' out of order (Requested end: '{$nodeName}')", E_USER_WARNING);
 		}
 		
-		while (self::$currentNode && self::$currentNode->getName() != $nodeName)
-		{
-			if (!$nuke)
-			{
-				trigger_error("Ending profile node '" . self::$currentNode->getName() . "' out of order (Requested end: '{$nodeName}')", E_USER_WARNING);
-			}
-			
-			self::$currentNode = self::$currentNode->end(self::$profilerKey);
-			self::$depthCount --;
-		}
-		
-		if (self::$currentNode && self::$currentNode->getName() == $nodeName)
-		{
-			self::$currentNode = self::$currentNode->end(self::$profilerKey);
-			self::$depthCount --;
-		}
-		
-		return self::$currentNode;
+		self::$currentNode = self::$currentNode->end(self::$profilerKey);
+		self::$depthCount --;
+	}
+	
+	if (self::$currentNode && self::$currentNode->getName() == $nodeName)
+	{
+		self::$currentNode = self::$currentNode->end(self::$profilerKey);
+		self::$depthCount --;
+	}
+	
+	return self::$currentNode;
 	}
 	
 	/**
@@ -308,18 +308,18 @@ class Profiler
 	 */
 	public static function sqlStart($query)
 	{	
-		if (!self::isEnabled()) return self::$ghostNode;
+	if (!self::isEnabled()) return self::$ghostNode;
 	
-		if (false == self::$currentNode)
-		{
-			self::start("Profiler Default Top Level");			
-		}
-		
-		$sqlProfile = new ProfilerSQLNode($query, self::$currentNode);
+	if (false == self::$currentNode)
+	{
+		self::start("Profiler Default Top Level");		
+	}
+	
+	$sqlProfile = new ProfilerSQLNode($query, self::$currentNode);
 
-		self::$currentNode->sqlStart($sqlProfile);
+	self::$currentNode->sqlStart($sqlProfile);
 
-		return $sqlProfile;
+	return $sqlProfile;
 	}
 	
 	/**
@@ -334,7 +334,7 @@ class Profiler
 	 */
 	public static function addQueryDuration($time)
 	{
-		return self::$totalQueryTime += $time;
+	return self::$totalQueryTime += $time;
 	}
 	
 	/**
@@ -344,7 +344,7 @@ class Profiler
 	 */
 	public static function getTotalQueryTime()
 	{
-		return round(self::$totalQueryTime * 1000, 1);
+	return round(self::$totalQueryTime * 1000, 1);
 	}
 	
 	/**
@@ -354,7 +354,7 @@ class Profiler
 	 */
 	public static function getGlobalStart()
 	{
-		return round(self::$globalStart * 1000, 1);
+	return round(self::$globalStart * 1000, 1);
 	}
 	
 	/**
@@ -364,7 +364,7 @@ class Profiler
 	 */
 	public static function getGlobalDuration()
 	{
-		return round(self::$globalDuration * 1000, 1);
+	return round(self::$globalDuration * 1000, 1);
 	}
 	
 	/**
@@ -375,37 +375,37 @@ class Profiler
 	 */
 	public static function getMemUsage($unit = '')
 	{
-		$usage = memory_get_usage();
-		
-		if ($usage < 1e3 || $unit == 'B')
-		{
-			$unit = '';
-		}
-		elseif ($usage < 9e5 || $unit == 'K')
-		{
-			$usage = round($usage / 1e3, 2);
-			$unit = 'K';
-		}
-		elseif ($usage < 9e8 || $unit == 'M')
-		{
-			$usage = round($usage / 1e6, 2);
-			$unit = 'M';
-		}
-		elseif ($usage < 9e11 || $unit = 'G')
-		{
-			$usage = round($usage / 1e9, 2);
-			$unit = 'G';
-		}
-		else
-		{
-			$usage = round($usage / 1e12, 2);
-			$unit = 'T';
-		}
-		
-		return array(
-			'num' => $usage,
-			'unit' => $unit,
-		);
+	$usage = memory_get_usage();
+	
+	if ($usage < 1e3 || $unit == 'B')
+	{
+		$unit = '';
+	}
+	elseif ($usage < 9e5 || $unit == 'K')
+	{
+		$usage = round($usage / 1e3, 2);
+		$unit = 'K';
+	}
+	elseif ($usage < 9e8 || $unit == 'M')
+	{
+		$usage = round($usage / 1e6, 2);
+		$unit = 'M';
+	}
+	elseif ($usage < 9e11 || $unit = 'G')
+	{
+		$usage = round($usage / 1e9, 2);
+		$unit = 'G';
+	}
+	else
+	{
+		$usage = round($usage / 1e12, 2);
+		$unit = 'T';
+	}
+	
+	return array(
+		'num' => $usage,
+		'unit' => $unit,
+	);
 	}
 	
 	/**
@@ -415,16 +415,16 @@ class Profiler
 	 */
 	public static function render($show_depth = -1)
 	{	
-		if (!self::isEnabled()) return self::$ghostNode;
+	if (!self::isEnabled()) return self::$ghostNode;
 	
-		self::end("___GLOBAL_END_PROFILER___", true);
-		
-		self::$globalEnd = microtime(true);
-		self::$globalDuration = self::$globalEnd - self::$globalStart;
+	self::end("___GLOBAL_END_PROFILER___", true);
+	
+	self::$globalEnd = microtime(true);
+	self::$globalDuration = self::$globalEnd - self::$globalStart;
 
-		self::calculateThreshold();
-				
-		require_once dirname(__FILE__) . '/profiler_tpl.tpl.php';
+	self::calculateThreshold();
+		
+	require_once dirname(__FILE__) . '/profiler_tpl.tpl.php';
 	}
 	
 	/**
@@ -436,7 +436,7 @@ class Profiler
 	 */
 	public static function addDuration($time)
 	{
-		self::$childDurations []= $time;
+	self::$childDurations []= $time;
 	}
 
 	/**
@@ -452,7 +452,7 @@ class Profiler
 	 */
 	public function setTrivialThreshold($threshold)
 	{
-		self::$trivialThreshold = $threshold;
+	self::$trivialThreshold = $threshold;
 	}
 	
 	/**
@@ -465,19 +465,19 @@ class Profiler
 	 */
 	protected static function calculateThreshold()
 	{
-		if (count(self::$childDurations))
+	if (count(self::$childDurations))
+	{
+		foreach (self::$childDurations as &$childDuration)
 		{
-			foreach (self::$childDurations as &$childDuration)
-			{
-				$childDuration = round($childDuration * 1000, 1);
-			}
-		
-			sort(self::$childDurations);
-		
-			self::$trivialThresholdMS = self::$childDurations[ floor(count(self::$childDurations) * self::$trivialThreshold) ];
+		$childDuration = round($childDuration * 1000, 1);
 		}
+	
+		sort(self::$childDurations);
+	
+		self::$trivialThresholdMS = self::$childDurations[ floor(count(self::$childDurations) * self::$trivialThreshold) ];
 	}
-		
+	}
+	
 	/**
 	 * Determines if a node is trivial
 	 *
@@ -487,9 +487,9 @@ class Profiler
 	 */
 	public static function isTrivial($node)
 	{
-		$node_duration = $node->getSelfDuration();
-		
-		return $node_duration < self::$trivialThresholdMS;
+	$node_duration = $node->getSelfDuration();
+	
+	return $node_duration < self::$trivialThresholdMS;
 	}
 }
 
@@ -591,7 +591,7 @@ class ProfilerNode
 	 * @var float
 	 */
 	protected $totalSQLQueryDuration = 0;
-		
+	
 	/**
 	 * Local reference to profiler key generated at initialization
 	 *
@@ -617,14 +617,14 @@ class ProfilerNode
 	 */
 	public function __construct($name, $depth, $parentNode, $profilerKey)
 	{
-		$this->started = microtime(true);
-		
-		$this->name = $name;
-		$this->depth = $depth;
-		
-		$this->parentNode = $parentNode;
-		
-		$this->profilerKey = $profilerKey;
+	$this->started = microtime(true);
+	
+	$this->name = $name;
+	$this->depth = $depth;
+	
+	$this->parentNode = $parentNode;
+	
+	$this->profilerKey = $profilerKey;
 	}
 	
 	/**
@@ -638,27 +638,27 @@ class ProfilerNode
 	 */
 	public function end($profilerKey = null)
 	{
-		if (!$profilerKey || $profilerKey != $this->profilerKey)
-		{
-			profiler::end($this->name);
-			
-			return $this->parentNode;
-		}
-		
-		if (null == $this->ended)
-		{
-			$this->ended = microtime(true);
-			$this->totalDuration = $this->ended - $this->started;
-			$this->selfDuration = $this->totalDuration - $this->childDuration;
-			
-			if ($this->parentNode)
-			{
-				$this->parentNode->increaseChildDuration($this->totalDuration);
-				profiler::addDuration( $this->selfDuration );
-			}
-		}
+	if (!$profilerKey || $profilerKey != $this->profilerKey)
+	{
+		profiler::end($this->name);
 		
 		return $this->parentNode;
+	}
+	
+	if (null == $this->ended)
+	{
+		$this->ended = microtime(true);
+		$this->totalDuration = $this->ended - $this->started;
+		$this->selfDuration = $this->totalDuration - $this->childDuration;
+		
+		if ($this->parentNode)
+		{
+		$this->parentNode->increaseChildDuration($this->totalDuration);
+		profiler::addDuration( $this->selfDuration );
+		}
+	}
+	
+	return $this->parentNode;
 	}
 	
 	/**
@@ -672,10 +672,10 @@ class ProfilerNode
 	 */
 	public function sqlStart($sqlProfile)
 	{
-		$this->sqlQueries []= $sqlProfile;
-		$this->sqlQueryCount ++;
-		
-		return $sqlProfile;
+	$this->sqlQueries []= $sqlProfile;
+	$this->sqlQueryCount ++;
+	
+	return $sqlProfile;
 	}
 	
 	/**
@@ -685,7 +685,7 @@ class ProfilerNode
 	 */
 	public function getName()
 	{
-		return $this->name;
+	return $this->name;
 	}
 	
 	/**
@@ -695,7 +695,7 @@ class ProfilerNode
 	 */
 	public function getDepth()
 	{
-		return $this->depth;
+	return $this->depth;
 	}
 	
 	/**
@@ -705,7 +705,7 @@ class ProfilerNode
 	 */
 	public function getParent()
 	{
-		return $this->parentNode;
+	return $this->parentNode;
 	}
 	
 	/**
@@ -720,9 +720,9 @@ class ProfilerNode
 	 */
 	public function increaseChildDuration($time)
 	{
-		$this->childDuration += $time;
+	$this->childDuration += $time;
 
-		return $this->childDuration;
+	return $this->childDuration;
 	}
 	
 	/**
@@ -734,9 +734,9 @@ class ProfilerNode
 	 */
 	public function addChild($childNode)
 	{
-		$this->childNodes []= $childNode;
-		
-		return $this;
+	$this->childNodes []= $childNode;
+	
+	return $this;
 	}
 	
 	/**
@@ -746,7 +746,7 @@ class ProfilerNode
 	 */
 	public function hasChildren()
 	{
-		return count($this->childNodes) > 0? true : false;
+	return count($this->childNodes) > 0? true : false;
 	}
 	
 	/**
@@ -756,7 +756,7 @@ class ProfilerNode
 	 */
 	public function getChildren()
 	{
-		return $this->childNodes;
+	return $this->childNodes;
 	}
 
 	/**
@@ -770,22 +770,22 @@ class ProfilerNode
 	 */
 	public function hasNonTrivialChildren()
 	{
-		if ($this->hasChildren())
+	if ($this->hasChildren())
+	{
+		foreach ($this->getChildren() as $child)
 		{
-			foreach ($this->getChildren() as $child)
-			{
-				if (!profiler::isTrivial($child))
-				{
-					return true;
-				}
-				if ($child->hasNonTrivialChildren())
-				{
-					return true;
-				}
-			}
+		if (!profiler::isTrivial($child))
+		{
+			return true;
 		}
+		if ($child->hasNonTrivialChildren())
+		{
+			return true;
+		}
+		}
+	}
 
-		return false;
+	return false;
 	}
 
 	/**
@@ -795,7 +795,7 @@ class ProfilerNode
 	 */
 	public function hasSQLQueries()
 	{
-		return $this->sqlQueryCount > 0? true : false;
+	return $this->sqlQueryCount > 0? true : false;
 	}
 	
 	/**
@@ -805,7 +805,7 @@ class ProfilerNode
 	 */
 	public function getSQLQueries()
 	{
-		return $this->sqlQueries;
+	return $this->sqlQueries;
 	}
 	
 	/**
@@ -815,7 +815,7 @@ class ProfilerNode
 	 */
 	public function getSQLQueryCount()
 	{
-		return $this->sqlQueryCount;
+	return $this->sqlQueryCount;
 	}
 	
 	/**
@@ -828,7 +828,7 @@ class ProfilerNode
 	 */
 	public function addQueryDuration($time)
 	{
-		$this->totalSQLQueryDuration += $time;
+	$this->totalSQLQueryDuration += $time;
 	}	
 	
 	/**
@@ -838,7 +838,7 @@ class ProfilerNode
 	 */
 	public function getTotalSQLQueryDuration()
 	{
-		return round($this->totalSQLQueryDuration * 1000, 1);
+	return round($this->totalSQLQueryDuration * 1000, 1);
 	}
 	
 	/**
@@ -848,7 +848,7 @@ class ProfilerNode
 	 */
 	public function getStart()
 	{
-		return round($this->started * 1000, 1);
+	return round($this->started * 1000, 1);
 	}
 	
 	/**
@@ -858,7 +858,7 @@ class ProfilerNode
 	 */
 	public function getEnd()
 	{
-		return round($this->ended * 1000, 1);
+	return round($this->ended * 1000, 1);
 	}
 	
 	/**
@@ -868,7 +868,7 @@ class ProfilerNode
 	 */
 	public function getTotalDuration()
 	{
-		return round($this->totalDuration * 1000, 1);
+	return round($this->totalDuration * 1000, 1);
 	}
 	
 	/**
@@ -878,7 +878,7 @@ class ProfilerNode
 	 */
 	public function getSelfDuration()
 	{
-		return round($this->selfDuration * 1000, 1);
+	return round($this->selfDuration * 1000, 1);
 	}
 }
 
@@ -941,13 +941,13 @@ class ProfilerSQLNode
 	 */
 	public function __construct($query, $profileNode = null)
 	{
-		$this->started = microtime(true);
-		$this->query = $query;
-		$this->profileNode = $profileNode;
-		
-		$this->callstack = debug_backtrace();
-		array_shift($this->callstack);
-		array_shift($this->callstack);
+	$this->started = microtime(true);
+	$this->query = $query;
+	$this->profileNode = $profileNode;
+	
+	$this->callstack = debug_backtrace();
+	array_shift($this->callstack);
+	array_shift($this->callstack);
 	}
 	
 	/**
@@ -959,15 +959,15 @@ class ProfilerSQLNode
 	 */
 	public function end()
 	{
-		if (null == $this->ended)
-		{
-			$this->ended = microtime(true);
-			$this->duration = $this->ended - $this->started;
-			$this->profileNode->addQueryDuration($this->duration);
-			profiler::addQueryDuration($this->duration);
-		}
-		
-		return $this;
+	if (null == $this->ended)
+	{
+		$this->ended = microtime(true);
+		$this->duration = $this->ended - $this->started;
+		$this->profileNode->addQueryDuration($this->duration);
+		profiler::addQueryDuration($this->duration);
+	}
+	
+	return $this;
 	}
 	
 	/**
@@ -979,7 +979,7 @@ class ProfilerSQLNode
 	 */
 	public function getQuery()
 	{
-		return preg_replace('#^\s+#m', "\n", $this->query);
+	return preg_replace('#^\s+#m', "\n", $this->query);
 	}
 	
 	/**
@@ -991,28 +991,28 @@ class ProfilerSQLNode
 	 */
 	public function getQueryType()
 	{
-		list($start_clause) = preg_split("#\s+#", $this->getQuery()); 
+	list($start_clause) = preg_split("#\s+#", $this->getQuery()); 
+	
+	$start_clause = strtolower($start_clause);
+	
+	switch ($start_clause)
+	{
+		case 'select':
+		$type = 'reader';
+		break;
 		
-		$start_clause = strtolower($start_clause);
+		case 'insert':
+		case 'update':
+		case 'delete':
+		$type = 'writer';
+		break;
 		
-		switch ($start_clause)
-		{
-			case 'select':
-				$type = 'reader';
-			break;
-			
-			case 'insert':
-			case 'update':
-			case 'delete':
-				$type = 'writer';
-			break;
-			
-			default:
-				$type = 'special';
-			break;
-		}
-		
-		return $type;
+		default:
+		$type = 'special';
+		break;
+	}
+	
+	return $type;
 	}
 	
 	/**
@@ -1022,7 +1022,7 @@ class ProfilerSQLNode
 	 */
 	public function getDuration()
 	{
-		return round($this->duration * 1000, 1);
+	return round($this->duration * 1000, 1);
 	}
 	
 	/**
@@ -1032,7 +1032,7 @@ class ProfilerSQLNode
 	 */
 	public function getStart()
 	{
-		return round($this->started * 1000, 1);
+	return round($this->started * 1000, 1);
 	}
 	
 	/**
@@ -1044,7 +1044,7 @@ class ProfilerSQLNode
 	 */
 	public function getCallstack()
 	{
-		return $this->callstack;
+	return $this->callstack;
 	}
 }
 
@@ -1060,7 +1060,7 @@ class ProfilerGhostNode
 	 */
 	public function __call($method, $params)
 	{
-		return $this;
+	return $this;
 	}
 }
 
@@ -1113,7 +1113,7 @@ class ProfilerRenderer
 	 */
 	public static function setIncludeJquery($inc = true)
 	{
-		self::$includeJquery = $inc;
+	self::$includeJquery = $inc;
 	}
 	
 	/**
@@ -1124,7 +1124,7 @@ class ProfilerRenderer
 	 */
 	public static function includeJquery()
 	{
-		return self::$includeJquery;
+	return self::$includeJquery;
 	}
 	
 	/**
@@ -1135,7 +1135,7 @@ class ProfilerRenderer
 	 */
 	public static function setJqueryLocation($url)
 	{
-		self::$jQueryLocation = $url;
+	self::$jQueryLocation = $url;
 	}
 	
 	/**
@@ -1146,7 +1146,7 @@ class ProfilerRenderer
 	 */
 	public static function getJqueryLocation()
 	{
-		return self::$jQueryLocation;
+	return self::$jQueryLocation;
 	}
 	
 	/**
@@ -1157,7 +1157,7 @@ class ProfilerRenderer
 	 */
 	public static function setIncludePrettify($inc = true)
 	{
-		self::$includePrettify = $inc;
+	self::$includePrettify = $inc;
 	}
 	
 	/**
@@ -1168,7 +1168,7 @@ class ProfilerRenderer
 	 */
 	public static function includePrettify()
 	{
-		return self::$includePrettify;
+	return self::$includePrettify;
 	}
 	
 	/**
@@ -1179,7 +1179,7 @@ class ProfilerRenderer
 	 */	
 	public static function setPrettifyLocation($url)
 	{
-		self::$prettifyLocation = $url;
+	self::$prettifyLocation = $url;
 	}
 	
 	/**
@@ -1190,7 +1190,7 @@ class ProfilerRenderer
 	 */
 	public static function getPrettifyLocation()
 	{
-		return self::$prettifyLocation;
+	return self::$prettifyLocation;
 	}
 	
 	/**
@@ -1201,26 +1201,26 @@ class ProfilerRenderer
 	 */
 	public static function renderNode($node, $max_depth = -1) { ?>
 
-		<tr class="depth_<?php echo $node->getDepth(); ?> <?php echo profiler::isTrivial($node) && !$node->hasNonTrivialChildren()? 'profiler-trivial' : ''; ?>">
-			<td class="profiler-step_id"><?php echo str_repeat('&nbsp;&nbsp;&nbsp;', $node->getDepth() - 1); ?><?php echo $node->getName(); ?></td>
-			<td class="profiler-stat profiler-monospace profiler-step_self_duration"><?php echo $node->getSelfDuration(); ?></td>
-			<td class="profiler-stat profiler-monospace profiler-step_total_duration"><?php echo $node->getTotalDuration(); ?></td>
-			<td class="profiler-stat profiler-monospace profiler-start_delay">
-				<span class="profiler-unit">+</span><?php echo round($node->getStart() - profiler::getGlobalStart(), 1); ?>
-			</td>
-			<td class="profiler-stat profiler-monospace profiler-query_count">
-				<a href="#" class="profiler-show-queries-button" data-node-id="<?php echo md5($node->getName() . $node->getStart()); ?>"><?php echo $node->getSQLQueryCount() . " sql"; ?></a>
-			</td>
-			<td class="profiler-stat profiler-monospace profiler-query_time"><?php echo $node->getTotalSQLQueryDuration(); ?></td>
-		</tr>
-		
-		<?php if ($node->hasChildren() && ($max_depth == -1 || $max_depth > $node->getDepth()))
+	<tr class="depth_<?php echo $node->getDepth(); ?> <?php echo profiler::isTrivial($node) && !$node->hasNonTrivialChildren()? 'profiler-trivial' : ''; ?>">
+		<td class="profiler-step_id"><?php echo str_repeat('&nbsp;&nbsp;&nbsp;', $node->getDepth() - 1); ?><?php echo $node->getName(); ?></td>
+		<td class="profiler-stat profiler-monospace profiler-step_self_duration"><?php echo $node->getSelfDuration(); ?></td>
+		<td class="profiler-stat profiler-monospace profiler-step_total_duration"><?php echo $node->getTotalDuration(); ?></td>
+		<td class="profiler-stat profiler-monospace profiler-start_delay">
+		<span class="profiler-unit">+</span><?php echo round($node->getStart() - profiler::getGlobalStart(), 1); ?>
+		</td>
+		<td class="profiler-stat profiler-monospace profiler-query_count">
+		<a href="#" class="profiler-show-queries-button" data-node-id="<?php echo md5($node->getName() . $node->getStart()); ?>"><?php echo $node->getSQLQueryCount() . " sql"; ?></a>
+		</td>
+		<td class="profiler-stat profiler-monospace profiler-query_time"><?php echo $node->getTotalSQLQueryDuration(); ?></td>
+	</tr>
+	
+	<?php if ($node->hasChildren() && ($max_depth == -1 || $max_depth > $node->getDepth()))
+	{
+		foreach ($node->getChildren() as $childNode)
 		{
-			foreach ($node->getChildren() as $childNode)
-			{
-				self::renderNode($childNode, $max_depth);
-			}
+		self::renderNode($childNode, $max_depth);
 		}
+	}
 	}
 	
 	/**
@@ -1231,69 +1231,69 @@ class ProfilerRenderer
 	 */
 	public static function renderNodeSQL($node)
 	{
-		if ($node->hasSQLQueries())
-		{
-			$c = 0; //row counter
-			$nodeQueries = $node->getSQLQueries();
-			?>
-			
-			<tr class="profiler-query-node-name" id="profiler-node-queries-<?php echo md5($node->getName() . $node->getStart()); ?>">
-				<th colspan="4"><?php echo $node->getName(); ?></th>
-			</tr>
+	if ($node->hasSQLQueries())
+	{
+		$c = 0; //row counter
+		$nodeQueries = $node->getSQLQueries();
+		?>
 		
-			<?php foreach ($nodeQueries as $query) { ?>
-				<tr class="profiler-query-info-header profiler-node-queries-<?php echo md5($node->getName() . $node->getStart()); ?>">
-					<th class="profiler-gutter">&nbsp;</td>
-					<th>start time (ms)</th>
-					<th>duration (ms)</th>
-					<th>query type</th>
+		<tr class="profiler-query-node-name" id="profiler-node-queries-<?php echo md5($node->getName() . $node->getStart()); ?>">
+		<th colspan="4"><?php echo $node->getName(); ?></th>
+		</tr>
+	
+		<?php foreach ($nodeQueries as $query) { ?>
+		<tr class="profiler-query-info-header profiler-node-queries-<?php echo md5($node->getName() . $node->getStart()); ?>">
+			<th class="profiler-gutter">&nbsp;</td>
+			<th>start time (ms)</th>
+			<th>duration (ms)</th>
+			<th>query type</th>
+		</tr>
+		<tr class="profiler-query-info profiler-node-queries-<?php echo md5($node->getName() . $node->getStart()); ?>">
+			<td>&nbsp;</td>
+			<td class="profiler-query-start-timer profiler-monospace">
+			<span class="profiler-unit">T+</span><?php echo round($query->getStart() - Profiler::getGlobalStart(), 1); ?>
+			</td>
+			<td class="profiler-query-duration profiler-monospace"><?php echo $query->getDuration(); ?></td>
+			<td class="profiler-query-type"><?php echo $query->getQueryType(); ?></td>
+		</tr>
+		<tr>
+			<td class="profiler-node-queries-<?php echo md5($node->getName() . $node->getStart()); ?>">&nbsp;</td>
+			<td class="profiler-node-queries-<?php echo md5($node->getName() . $node->getStart()); ?>" colspan="3">
+			<pre class="prettyprint lang-sql"><?php echo $query->getQuery(); ?></pre>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="4" class="profiler-query-more-info-links">
+			<a href="#profiler-results" class="profiler-back-to-top">top</a>
+			&nbsp;&middot;&nbsp;
+			<a href="#<?php echo md5($query->getQuery()) . "_query_callstack"; ?>" class="profiler-show-callstack" data-query-id="<?php echo md5($query->getQuery()); ?>">show callstack</a>
+			</td>
+		</tr>
+		<tr class="profiler-hidden" id="<?php echo md5($query->getQuery()) . "_query_callstack"; ?>">
+			<td>&nbsp;</td>
+			<td colspan="3">
+			<table class="profiler-query_callstack">
+				<?php foreach ($query->getCallstack() as $stackStep): ?>
+				<tr class="<?php echo ++$c % 2? 'odd' : 'even'; ?>">
+					<td class="profiler-callstack-method"><code class="prettyprint"><?php echo (!empty($stackStep['class'])? $stackStep['class'] . $stackStep['type'] : '') . $stackStep['function']; ?></code></td>
 				</tr>
-				<tr class="profiler-query-info profiler-node-queries-<?php echo md5($node->getName() . $node->getStart()); ?>">
-					<td>&nbsp;</td>
-					<td class="profiler-query-start-timer profiler-monospace">
-						<span class="profiler-unit">T+</span><?php echo round($query->getStart() - Profiler::getGlobalStart(), 1); ?>
-					</td>
-					<td class="profiler-query-duration profiler-monospace"><?php echo $query->getDuration(); ?></td>
-					<td class="profiler-query-type"><?php echo $query->getQueryType(); ?></td>
-				</tr>
-				<tr>
-					<td class="profiler-node-queries-<?php echo md5($node->getName() . $node->getStart()); ?>">&nbsp;</td>
-					<td class="profiler-node-queries-<?php echo md5($node->getName() . $node->getStart()); ?>" colspan="3">
-						<pre class="prettyprint lang-sql"><?php echo $query->getQuery(); ?></pre>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="4" class="profiler-query-more-info-links">
-						<a href="#profiler-results" class="profiler-back-to-top">top</a>
-						&nbsp;&middot;&nbsp;
-						<a href="#<?php echo md5($query->getQuery()) . "_query_callstack"; ?>" class="profiler-show-callstack" data-query-id="<?php echo md5($query->getQuery()); ?>">show callstack</a>
-					</td>
-				</tr>
-				<tr class="profiler-hidden" id="<?php echo md5($query->getQuery()) . "_query_callstack"; ?>">
-					<td>&nbsp;</td>
-					<td colspan="3">
-						<table class="profiler-query_callstack">
-							<?php foreach ($query->getCallstack() as $stackStep): ?>
-								<tr class="<?php echo ++$c % 2? 'odd' : 'even'; ?>">
-									<td class="profiler-callstack-method"><code class="prettyprint"><?php echo (!empty($stackStep['class'])? $stackStep['class'] . $stackStep['type'] : '') . $stackStep['function']; ?></code></td>
-								</tr>
-							<?php endforeach; ?>
-						</table>
-					</td>
-				</tr>
-				<tr class="profiler-query-seperator">
-					<td colspan="4"><div class="profiler-hr"><hr /></div></td>
-				</tr>
-				
-			<?php }
-		}
+				<?php endforeach; ?>
+			</table>
+			</td>
+		</tr>
+		<tr class="profiler-query-seperator">
+			<td colspan="4"><div class="profiler-hr"><hr /></div></td>
+		</tr>
+		
+		<?php }
+	}
 
-		if ($node->hasChildren())
+	if ($node->hasChildren())
+	{
+		foreach ($node->getChildren() as $childNode)
 		{
-			foreach ($node->getChildren() as $childNode)
-			{
-				self::renderNodeSQL($childNode);
-			}
+		self::renderNodeSQL($childNode);
 		}
+	}
 	}
 }
